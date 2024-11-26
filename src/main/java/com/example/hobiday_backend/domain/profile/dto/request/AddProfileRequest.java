@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class AddProfileRequest {
-    public String profileName;
+    public String profileNickname;
     public List<String> profileGenre;
     // 이메일은 수정 못하도록 필드 선언 안함
 }

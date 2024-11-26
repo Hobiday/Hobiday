@@ -38,7 +38,7 @@ public class ProfileService {
                 .profileId(profile.getId())
 //                .userId(profile.getUserId()) // 방1
                 .userId(profile.getUser().getId()) // 방2
-                .profileName(profile.getProfileName())
+                .profileNickname(profile.getProfileNickname())
                 .profileEmail(profile.getProfileEmail())
 //                .profileGenre(profile.getProfileGenre())
                 .build();
@@ -50,7 +50,7 @@ public class ProfileService {
         return ProfileResponse.builder()
                 .profileId(profile.getId())
                 .userId(profile.getUser().getId())
-                .profileName(profile.getProfileName())
+                .profileNickname(profile.getProfileNickname())
                 .profileEmail(profile.getProfileEmail())
 //                .profileGenre(profile.getProfileGenre())
                 .build();
@@ -71,7 +71,7 @@ public class ProfileService {
 
     // 닉네임 중복 여부
     public ProfileMessageResponse isNicknameOverlap(String nickname){
-        if (profileRepository.findByNickname(nickname).isPresent()) { // 존재하는 닉네임이면
+        if (profileRepository.findByProfileNickname(nickname).isPresent()) { // 존재하는 닉네임이면
             return new ProfileMessageResponse("overlapping");
         }
         return new ProfileMessageResponse("non-overlapping");
@@ -88,7 +88,7 @@ public class ProfileService {
 //                .userId(userId) //방1
                 .user(user) //방2
                 .profileEmail(email)
-                .profileName(addProfileRequest.profileName)
+                .profileNickname(addProfileRequest.profileNickname)
                 .profileGenre(getGenreToString(addProfileRequest.profileGenre)) // 문자열 <- 리스트 변환해서 저장
                 .build());
         profile.updateProfileActiveFlag(); // 프로필 등록 여부 true로 전환
@@ -108,7 +108,7 @@ public class ProfileService {
         profile = profileRepository.save(Profile.builder()
                 .user(user)
                 .profileEmail(profile.getProfileEmail())
-                .profileName(profile.getProfileName())
+                .profileNickname(profile.getProfileNickname())
                 .profileGenre(!getGenreToString(updateProfileRequest.getProfileGenre()).isEmpty() ? getGenreToString(updateProfileRequest.getProfileGenre()) : profile.getProfileGenre())
                 .profileIntroduction(updateProfileRequest.getProfileIntroduction() != null ? updateProfileRequest.getProfileIntroduction() : profile.getProfileIntroduction())
                 .profileImageUrl(updateProfileRequest.getProfileImageUrl() != null ? updateProfileRequest.getProfileImageUrl() : profile.getProfileImageUrl())
@@ -119,7 +119,7 @@ public class ProfileService {
         return ProfileResponse.builder()
                 .profileId(profile.getId())
                 .userId(user.getId())
-                .profileName(profile.getProfileName())
+                .profileNickname(profile.getProfileNickname())
                 .profileEmail(profile.getProfileEmail())
                 .profileGenre(getGenreToList(profile.getProfileGenre()))
                 .profileIntroduction(profile.getProfileIntroduction())

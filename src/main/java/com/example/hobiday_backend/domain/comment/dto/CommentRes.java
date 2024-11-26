@@ -23,7 +23,7 @@ public class CommentRes {
         return CommentRes.builder()
                 .id(comment.getId())
                 .contents(comment.getContents())
-                .profileName(comment.getProfile().getProfileName())
+                .profileName(comment.getProfile().getProfileNickname())
                 .profileImageUrl(comment.getProfile().getProfileImageUrl())
                 .createdTime(comment.getCreatedTime())
                 .modifiedTime(comment.getModifiedTime())

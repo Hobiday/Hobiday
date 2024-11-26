@@ -12,7 +12,7 @@ import java.util.List;
 public class ProfileResponse {
     private Long userId;
     private Long profileId;
-    private String profileName;
+    private String profileNickname;
     private String profileEmail;
     private List<String> profileGenre;
     private String profileIntroduction;

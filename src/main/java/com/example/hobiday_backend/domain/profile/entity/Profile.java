@@ -28,7 +28,7 @@ public class Profile {
     private User user;
 
     @Column(length=20)
-    private String profileName;
+    private String profileNickname;
     private String profileEmail;
 
     @Column(length=20)
@@ -54,14 +54,14 @@ public class Profile {
         this.profileActiveFlag = true;
     }
 
-    @Builder(toBuilder = true)
+    @Builder
     public Profile(//Long userId, //방법1
                    User user, // 방법2
-                   String profileName, String profileGenre, String profileEmail,
+                   String profileNickname, String profileGenre, String profileEmail,
                    String profileIntroduction, String profileImageUrl) {
 //        this.userId = userId; //방법1
         this.user = user;
-        this.profileName = profileName;
+        this.profileNickname = profileNickname;
         this.profileEmail = profileEmail;
         this.profileGenre = profileGenre;
         this.profileIntroduction = profileIntroduction;

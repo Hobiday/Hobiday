@@ -6,7 +6,7 @@ import java.util.List;
 
 @Getter
 public class UpdateProfileRequest {
-    public String profileName;
+    public String profileNickname;
     public List<String> profileGenre;
     public String profileIntroduction;
     public String profileImageUrl;
