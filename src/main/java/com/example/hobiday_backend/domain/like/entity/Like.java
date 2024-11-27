@@ -2,9 +2,7 @@ package com.example.hobiday_backend.domain.like.entity;
 
 import com.example.hobiday_backend.domain.comment.entity.Comment;
 import com.example.hobiday_backend.domain.feed.entity.Feed;
-import com.example.hobiday_backend.domain.like.dto.LikeReq;
 import com.example.hobiday_backend.domain.profile.entity.Profile;
-import com.example.hobiday_backend.domain.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

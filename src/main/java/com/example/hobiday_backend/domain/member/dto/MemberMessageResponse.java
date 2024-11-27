@@ -1,4 +1,4 @@
-package com.example.hobiday_backend.domain.users.dto;
+package com.example.hobiday_backend.domain.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserMessageResponse {
+public class MemberMessageResponse {
     String logoutMessage;
 }

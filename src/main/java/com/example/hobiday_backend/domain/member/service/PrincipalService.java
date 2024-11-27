@@ -1,8 +1,8 @@
-package com.example.hobiday_backend.domain.users.service;
+package com.example.hobiday_backend.domain.member.service;
 
-import com.example.hobiday_backend.domain.users.dto.PrincipalDetails;
-import com.example.hobiday_backend.domain.users.entity.User;
-import com.example.hobiday_backend.domain.users.repository.UserRepository;
+import com.example.hobiday_backend.global.oauth.PrincipalDetails;
+import com.example.hobiday_backend.domain.member.entity.Member;
+import com.example.hobiday_backend.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class PrincipalService implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     // 시큐리티 session => Authentication => UserDetails
     // 여기서 리턴된 값이 Authentication 안에 들어간다.(리턴될때 들어간다.)
@@ -21,10 +21,10 @@ public class PrincipalService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User findUser = userRepository.findByEmail(username)
+        Member findMember = memberRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
-        if(findUser!=null) {
-            return new PrincipalDetails(findUser);
+        if(findMember !=null) {
+            return new PrincipalDetails(findMember);
         }
         return null;
     }

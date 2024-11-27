@@ -10,11 +10,12 @@ import java.util.List;
 @Getter
 @Setter
 public class ProfileResponse {
-    private Long userId;
     private Long profileId;
+    private Long memberId;
     private String profileNickname;
     private String profileEmail;
     private List<String> profileGenre;
     private String profileIntroduction;
     private String profileImageUrl;
+
 }

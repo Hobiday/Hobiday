@@ -2,15 +2,13 @@ package com.example.hobiday_backend.domain.like.controller;
 
 import com.example.hobiday_backend.domain.like.dto.LikeRes;
 import com.example.hobiday_backend.domain.like.service.LikeService;
-import com.example.hobiday_backend.domain.users.entity.User;
-import com.example.hobiday_backend.domain.users.service.UserService;
+import com.example.hobiday_backend.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -20,7 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class LikeController {
 
     private final LikeService likeService;
-    private final UserService userService;
+    private final MemberService memberService;
 
     @Operation(
             summary = "좋아요 추가/취소",
@@ -34,7 +32,7 @@ public class LikeController {
     public ResponseEntity<LikeRes> toggleLike(
             @PathVariable Long feedId,
             @RequestHeader String token) {
-        Long userId = userService.getUserIdByToken(token);
+        Long userId = memberService.getMemberIdByToken(token);
         LikeRes likeRes = likeService.toggleLike(feedId, userId);
         return ResponseEntity.ok(likeRes);
     }

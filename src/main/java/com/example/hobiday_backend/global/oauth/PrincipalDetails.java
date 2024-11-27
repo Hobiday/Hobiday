@@ -1,6 +1,6 @@
-package com.example.hobiday_backend.domain.users.dto;
+package com.example.hobiday_backend.global.oauth;
 
-import com.example.hobiday_backend.domain.users.entity.User;
+import com.example.hobiday_backend.domain.member.entity.Member;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,16 +13,16 @@ import java.util.Map;
 
 @Data
 public class PrincipalDetails implements UserDetails, OAuth2User {
-    private User user;
+    private Member member;
     private Map<String, Object> attributes;
 
-    public PrincipalDetails(User user) {
-        this.user = user;
+    public PrincipalDetails(Member member) {
+        this.member = member;
     }
 
     //OAuth 로그인 생성자
-    public PrincipalDetails(User user, Map<String, Object> attributes ) {
-        this.user = user;
+    public PrincipalDetails(Member member, Map<String, Object> attributes ) {
+        this.member = member;
         this.attributes = attributes;
     }
 
@@ -53,12 +53,12 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return member.getEmail();
     }
 
     @Override // 계정 만료 여부 반환

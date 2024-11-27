@@ -4,7 +4,10 @@
 // if (createButton){
 //     createButton.addEventListener("click", (event) => {
 //         body = JSON.stringify({
-//             profileName: document.getElementById('profile-name').value,
+//             profileNickname: document.getElementById('profile-name').value,
+//             profileGenre: ["연극", "서커스"]
+//
+//             // profileGenre: document.getElementById('profile-genre').value
 //         });
 //         function success(){
 //             alert('등록 완료되었습니다.');

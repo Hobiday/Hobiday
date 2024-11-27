@@ -21,9 +21,9 @@ public class RefreshTokenService {
     public void delete() {
         // 회원 검색은 액세스토큰으로(현재의 시컨홀에 들어있는걸 가져옴).
         String token = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
-        Long userId = tokenProvider.getUserId(token);
+        Long userId = tokenProvider.getMemberId(token);
 
         // 삭제는 리프레시 토큰을.
-        refreshTokenRepository.deleteByUserId(userId);
+        refreshTokenRepository.deleteByMemberId(userId);
     }
 }

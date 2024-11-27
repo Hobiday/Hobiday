@@ -3,8 +3,8 @@ package com.example.hobiday_backend.domain.comment.controller;
 import com.example.hobiday_backend.domain.comment.dto.CommentReq;
 import com.example.hobiday_backend.domain.comment.dto.CommentRes;
 import com.example.hobiday_backend.domain.comment.service.CommentService;
-import com.example.hobiday_backend.domain.users.entity.User; // Import User entity
-import com.example.hobiday_backend.domain.users.service.UserService;
+import com.example.hobiday_backend.domain.member.entity.Member;
+import com.example.hobiday_backend.domain.member.service.MemberService;
 import com.example.hobiday_backend.global.dto.SuccessRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,7 +19,7 @@ import java.util.List;
 @Tag(name = "Comment", description = "댓글 API") // 컨트롤러 전체 설명
 public class CommentController {
     private final CommentService commentService;
-    private final UserService userService;
+    private final MemberService memberService;
 
     @Operation(summary = "댓글 작성", description = "새로운 댓글을 작성합니다.") // 메서드 설명
     @PostMapping("/{feedId}")
@@ -27,9 +27,9 @@ public class CommentController {
             @PathVariable Long feedId,
             @RequestBody CommentReq commentReq,
             @RequestHeader("Authorization") String token) {
-        Long userId = userService.getUserIdByToken(token);
-        User user=userService.findById(userId);
-        CommentRes comment = commentService.createComment(feedId, commentReq,user);
+        Long userId = memberService.getMemberIdByToken(token);
+        Member member = memberService.findById(userId);
+        CommentRes comment = commentService.createComment(feedId, commentReq, member);
         return ResponseEntity.ok(SuccessRes.success(comment));
     }
 
@@ -46,9 +46,9 @@ public class CommentController {
             @PathVariable Long commentId,
             @RequestBody CommentReq commentReq,
             @RequestHeader("Authorization") String token) {
-        Long userId = userService.getUserIdByToken(token);
-        User user=userService.findById(userId);
-        CommentRes updatedComment = commentService.updateComment(commentId, commentReq, user);
+        Long userId = memberService.getMemberIdByToken(token);
+        Member member = memberService.findById(userId);
+        CommentRes updatedComment = commentService.updateComment(commentId, commentReq, member);
         return ResponseEntity.ok(SuccessRes.success(updatedComment));
     }
 
@@ -57,9 +57,9 @@ public class CommentController {
     public ResponseEntity<SuccessRes<Void>> deleteComment(
             @PathVariable Long commentId,
             @RequestHeader("Authorization") String token) {
-        Long userId = userService.getUserIdByToken(token);
-        User user=userService.findById(userId);
-        commentService.deleteComment(commentId, user);
+        Long userId = memberService.getMemberIdByToken(token);
+        Member member = memberService.findById(userId);
+        commentService.deleteComment(commentId, member);
         return ResponseEntity.ok(SuccessRes.success(null));
     }
 }

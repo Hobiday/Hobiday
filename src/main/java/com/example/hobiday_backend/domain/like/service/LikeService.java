@@ -9,7 +9,6 @@ import com.example.hobiday_backend.domain.like.entity.Like;
 import com.example.hobiday_backend.domain.like.repository.LikeRepository;
 import com.example.hobiday_backend.domain.profile.entity.Profile;
 import com.example.hobiday_backend.domain.profile.repository.ProfileRepository;
-import com.example.hobiday_backend.domain.users.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +25,7 @@ public class LikeService {
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new FeedException(FeedErrorCode.FEED_NOT_FOUND));
         // userid로 프로필을 찾고 하면될려나
-        Profile profile = profileRepository.findByUserId(userId)
+        Profile profile = profileRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("프로필을 찾을 수 없습니다.")); // User ID로 Profile 찾기
 
         Optional<Like> existingLike = likeRepository.findByFeedAndProfile(feed, profile);

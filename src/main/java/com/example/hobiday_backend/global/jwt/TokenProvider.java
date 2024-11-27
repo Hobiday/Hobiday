@@ -1,6 +1,6 @@
 package com.example.hobiday_backend.global.jwt;
 
-import com.example.hobiday_backend.domain.users.entity.User;
+import com.example.hobiday_backend.domain.member.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
@@ -21,13 +21,13 @@ import java.util.Set;
 public class TokenProvider {
     private final JwtProperties jwtProperties;
 
-    public String generateToken(User user, Duration expiredAt){
+    public String generateToken(Member member, Duration expiredAt){
         Date now = new Date();
-        return makeToken(new Date(now.getTime() + expiredAt.toMillis()), user);
+        return makeToken(new Date(now.getTime() + expiredAt.toMillis()), member);
     }
 
     // JWT 토큰 생성 메서드
-    private String makeToken(Date expiry, User user) {
+    private String makeToken(Date expiry, Member member) {
         Date now = new Date();
 
         return Jwts.builder()
@@ -35,8 +35,8 @@ public class TokenProvider {
                 .setIssuer(jwtProperties.getIssuer()) // 내용 iss: temp@mail.com(yml에서 설정한 값)
                 .setIssuedAt(now)       // 내용 iat: 현재 시간
                 .setExpiration(expiry)  // 내용 exp: expiry 멤버 변수값
-                .setSubject(user.getEmail()) // 내용 sub: 유저의 이메일
-                .claim("id", user.getId()) // 클레임 id: 유저 ID
+                .setSubject(member.getEmail()) // 내용 sub: 유저의 이메일
+                .claim("id", member.getId()) // 클레임 id: 유저 ID
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 //서명: secretKey와 함께 해시값을 HS256 방식으로 암호화
                 .compact();
@@ -64,7 +64,7 @@ public class TokenProvider {
     }
 
     // 토큰 기반으로 유저 ID를 가져오는 메서드
-    public Long getUserId(String token){
+    public Long getMemberId(String token){
         Claims claims = getClaims(token);
         return claims.get("id", Long.class);
     }

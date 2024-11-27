@@ -1,7 +1,7 @@
-package com.example.hobiday_backend.domain.performance.service;
+package com.example.hobiday_backend.domain.perform.service;
 
-import com.example.hobiday_backend.domain.performance.entity.Performance;
-import com.example.hobiday_backend.domain.performance.repository.PerformanceRepository;
+import com.example.hobiday_backend.domain.perform.entity.Perform;
+import com.example.hobiday_backend.domain.perform.repository.PerformRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,8 +18,8 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class PerformanceService {
-    private final PerformanceRepository performanceRepository;
+public class PerformService {
+    private final PerformRepository performRepository;
     public void save() throws ParserConfigurationException, IOException, SAXException {
         log.info("파싱 작업 시행");
         /*
@@ -33,12 +33,12 @@ public class PerformanceService {
          */
         String baseUrl = "http://www.kopis.or.kr/openApi/restful/pblprfr";
         String service = "ecb03304355244159098962ad6c4a1eb";
-        String stdate = "20241112";
-        String eddate = "20241130";
-        String rows = "10";
+        String stdate = "20241112"; // 시작 검색기간
+        String eddate = "20241130"; // 종료 검색기간
+        String rows = "10";         // 공연 개수
         String cpage = "1";
-        String signgucode = "11";
-        String shcate = "AAAA";
+        String signgucode = "11";   // 지역 코드
+        String shcate = "AAAA";     // 장르 코드
 
         StringBuilder urlBuilder = new StringBuilder(baseUrl);
         urlBuilder.append("?service="+service);
@@ -88,7 +88,7 @@ public class PerformanceService {
 //                System.out.println("공연시설명: "+element.getElementsByTagName("fcltynm").item(0).getTextContent());
 //                System.out.println("지역명: "+element.getElementsByTagName("area").item(0).getTextContent());
 //                System.out.println("공연포스터 경로: "+element.getElementsByTagName("poster").item(0).getTextContent());
-                performanceRepository.save(Performance.builder()
+                performRepository.save(Perform.builder()
                         .prfnm(prfnm)
                         .prfpdfrom(prfpdfrom)
                         .prfpdto(prfpdto)

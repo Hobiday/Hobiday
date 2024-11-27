@@ -1,8 +1,8 @@
-package com.example.hobiday_backend.domain.users.service;
+package com.example.hobiday_backend.domain.member.service;
 
-import com.example.hobiday_backend.domain.users.dto.PrincipalDetails;
-import com.example.hobiday_backend.domain.users.entity.User;
-import com.example.hobiday_backend.domain.users.repository.UserRepository;
+import com.example.hobiday_backend.global.oauth.PrincipalDetails;
+import com.example.hobiday_backend.domain.member.entity.Member;
+import com.example.hobiday_backend.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,16 +13,16 @@ import org.springframework.stereotype.Service;
 @Service
 //UserDetailsService: 스프링 시큐리티에서 사용자 정보를 가져오는 인터페이스
 public class UserDetailService implements UserDetailsService  {
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
 
     // 맞는지 불확실
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User findUser = userRepository.findByEmail(username)
+        Member findMember = memberRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
-        if(findUser!=null) {
-            return new PrincipalDetails(findUser);
+        if(findMember !=null) {
+            return new PrincipalDetails(findMember);
         }
         return null;
     }

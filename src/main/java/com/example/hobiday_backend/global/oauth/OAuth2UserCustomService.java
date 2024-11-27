@@ -1,8 +1,7 @@
 package com.example.hobiday_backend.global.oauth;
 
-import com.example.hobiday_backend.domain.users.dto.PrincipalDetails;
-import com.example.hobiday_backend.domain.users.entity.User;
-import com.example.hobiday_backend.domain.users.repository.UserRepository;
+import com.example.hobiday_backend.domain.member.entity.Member;
+import com.example.hobiday_backend.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -17,7 +16,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Service
 public class OAuth2UserCustomService extends DefaultOAuth2UserService {
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -28,12 +27,12 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
 //        OAuth2UserInfo oAuth2UserInfo = new KakaoUserInfo((Map)user.getAttributes().get("kakao_account"),
 //                String.valueOf(user.getAttributes().get("id")));
 
-        User userEntity = save(user);
-        return new PrincipalDetails(userEntity, user.getAttributes());
+        Member memberEntity = save(user);
+        return new PrincipalDetails(memberEntity, user.getAttributes());
     }
 
     // users 테이블에 사용자 정보가 없으면 회원 데이터 생성
-    private User save(OAuth2User oAuth2User) {
+    private Member save(OAuth2User oAuth2User) {
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         // OAuth2-client가 지원해주는 provider(구글, 페이스북등)는 Map형태로 key,Object로 반환해준다.
@@ -46,12 +45,12 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
 
 //        log.info("OAuth2UserCustomService에서 nickname: {}, email: {}", nickname, email);
 
-        User user = userRepository.findByEmail(email) // 기존 회원 여부 찾는 기준은 email
+        Member member = memberRepository.findByEmail(email) // 기존 회원 여부 찾는 기준은 email
 //                .map(entity -> entity.update(email)) // 업데이트는 안함(폼 로그인 or 소셜로그인 추가 시에 동일인 하나로 통합할때 필요 가능성)
-                .orElse(User.builder()
+                .orElse(Member.builder()
                         .email(email)
                         .nickname(nickname)
                         .build());
-        return userRepository.save(user);
+        return memberRepository.save(member);
     }
 }
