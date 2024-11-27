@@ -27,8 +27,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(5); // 리프레시 토큰 기간 설정 5일
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(2); // 액세스 토큰 기간 설정 2일
-    public static final String REDIRECT_PATH = "http://localhost:3000/registration-form"; // 로그인 프로세스 모두 성공 후 리다이렉트할 페이지
-//    public static final String REDIRECT_PATH = "/registration-form"; // 로그인 프로세스 모두 성공 후 리다이렉트할 페이지
+//    public static final String REDIRECT_PATH = "http://localhost:3000/registration-form"; // 로그인 프로세스 모두 성공 후 리다이렉트할 페이지
+    public static final String REDIRECT_PATH = "/registration-form"; // 로그인 프로세스 모두 성공 후 리다이렉트할 페이지
 
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;

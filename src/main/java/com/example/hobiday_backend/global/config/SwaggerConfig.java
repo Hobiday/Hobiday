@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -23,14 +24,23 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
-        SecurityScheme apikey = new SecurityScheme()
+        SecurityScheme apiKey = new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
                 .in(SecurityScheme.In.HEADER)
                 .name("Authorization")
                 .scheme("bearer") // 수정 후보
                 .bearerFormat("JWT");
-    return new OpenAPI()
-                .components(new Components().addSecuritySchemes(JWT_SECURITY_SCHEME, apikey));
+
+        SecurityRequirement securityRequirement = new SecurityRequirement()
+                .addList("Bearer Token");
+
+        return new OpenAPI()
+                .components(new Components().addSecuritySchemes("Bearer Token", apiKey))
+                .addSecurityItem(securityRequirement);
+//    return new OpenAPI()
+//                .components(new Components().addSecuritySchemes(JWT_SECURITY_SCHEME, apikey));
     }
+
+
 }
 

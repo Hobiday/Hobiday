@@ -4,10 +4,10 @@ spring:
       mode: always
 
   datasource:
-    url: jdbc:mysql://db-hobiday.c1248mguandn.ap-northeast-2.rds.amazonaws.com:3306/hobiday?serverTimezone=Asia/Seoul
-#    url: jdbc:mysql://localhost:3306/hobiday?serverTimezone=Asia/Seoul
-    username: admin
-#    username: root
+#    url: jdbc:mysql://db-hobiday.c1248mguandn.ap-northeast-2.rds.amazonaws.com:3306/hobiday?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/hobiday?serverTimezone=Asia/Seoul
+#    username: admin
+    username: root
     password: 95206326
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
@@ -34,8 +34,8 @@ spring:
             client-id: f50d9911e72a37532cae75cba2277099 # 외부로 빼야함
             client-secret: FxIHbsanlyYyDot1yzsoaMS1y0T7fFgi # 외부로 빼야함
             client-authentication-method: client_secret_post
-            redirect-uri: http://ec2-3-37-184-82.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/kakao
-#            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+#            redirect-uri: http://ec2-3-37-184-82.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/kakao
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             client-name: kakao
             scope: # 외부로 빼야함
