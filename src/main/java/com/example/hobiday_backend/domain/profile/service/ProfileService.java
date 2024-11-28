@@ -11,6 +11,7 @@ import com.example.hobiday_backend.domain.member.entity.Member;
 import com.example.hobiday_backend.domain.member.repository.MemberRepository;
 import com.example.hobiday_backend.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 import static com.example.hobiday_backend.domain.perform.util.GenreCasting.getGenreToList;
 import static com.example.hobiday_backend.domain.perform.util.GenreCasting.getGenreToString;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ProfileService {
@@ -28,8 +30,8 @@ public class ProfileService {
 
 
     // 회원ID로 프로필 정보 반환
-    public ProfileResponse getProfileByUserId(Long userid){
-        Profile profile = profileRepository.findById(userid)
+    public ProfileResponse getProfileByUserId(Long memberId) {
+        Profile profile = profileRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
         return ProfileResponse.builder()
                 .profileId(profile.getId())
@@ -37,13 +39,14 @@ public class ProfileService {
                 .memberId(profile.getMember().getId()) // 방2
                 .profileNickname(profile.getProfileNickname())
                 .profileEmail(profile.getProfileEmail())
-//                .profileGenre(profile.getProfileGenre())
+                .profileGenre(getGenreToList(profile.getProfileGenre()))
                 .build();
     }
 
     // 프로필ID로 프로필 정보 반환
     public ProfileResponse getProfile(Long profieId){
-        Profile profile = profileRepository.findById(profieId).get();
+        Profile profile = profileRepository.findById(profieId)
+                .orElseThrow(() -> new IllegalArgumentException("프로필을 찾을 수 없습니다."));;
         return ProfileResponse.builder()
                 .profileId(profile.getId())
                 .memberId(profile.getMember().getId())
@@ -52,19 +55,6 @@ public class ProfileService {
 //                .profileGenre(profile.getProfileGenre())
                 .build();
     }
-
-//    // 프로필 등록 여부. 없는 경우도 알 수 있게 프로필 리턴 -> 아직 테스트 미실행
-//    public ProfileRegistrationResponse checkProfile(Long memberId){
-//        Optional<Profile> profile = profileRepository.findById(); // 회원ID로 만들어진 프로필DB 있는지 확인
-//
-//        // 기존 회원일 경우
-//        if (profile.isPresent()) {
-//            return new ProfileRegistrationResponse(true);
-//        }
-//
-//        // 신규 회원일 경우
-//        return new ProfileRegistrationResponse(false);
-//    }
 
     // 닉네임 중복 여부
     public ProfileMessageResponse isNicknameOverlap(String nickname){
@@ -76,20 +66,20 @@ public class ProfileService {
 
     // 프로필 등록(온보딩 작성)
     @Transactional
-    public Profile saveFirst(//Long userId, //방1
+    public ProfileResponse saveFirst(//Long userId, //방1
                              Member member, //방2
                              AddProfileRequest addProfileRequest){
 //        String email = userRepository.findById(userId).get().getEmail(); //방1
         String email = member.getEmail(); //방2
-        Profile profile = profileRepository.save(Profile.builder()
+        log.info("dto 장르: " + addProfileRequest.profileGenre);
+        profileRepository.save(Profile.builder()
 //                .userId(userId) //방1
                 .member(member) //방2
                 .profileEmail(email)
                 .profileNickname(addProfileRequest.profileNickname)
                 .profileGenre(getGenreToString(addProfileRequest.profileGenre)) // 문자열 <- 리스트 변환해서 저장
                 .build());
-        profile.updateProfileActiveFlag(); // 프로필 등록 여부 true로 전환
-        return profile;
+        return getProfileByUserId(member.getId());
     }
 
     // 프로필 업데이트
@@ -97,7 +87,8 @@ public class ProfileService {
         Long memberId = memberService.getMemberIdByToken(token);
         Profile profile = profileRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("프로필을 찾을 수 없습니다."));
-        Member member = memberRepository.findById(memberId).get();
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));;
         // 사용자 일치 여부 확인
         if(!profile.getMember().getId().equals(memberId)) {
             throw new IllegalArgumentException("프로필 수정 권한이 없습니다.");

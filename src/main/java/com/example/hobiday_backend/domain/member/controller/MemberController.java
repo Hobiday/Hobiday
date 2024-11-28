@@ -58,6 +58,17 @@ public class MemberController {
                 .body(freePassResponse);
     }
 
+    @Operation(summary="(개발용)기존회원 로그인", description="미리 만들어둔 회원에 로그인, 토큰 받음")
+    @GetMapping("/api/test/freepass/{nickname}")
+    public ResponseEntity<FreePassResponse> loginFreePass(@PathVariable String nickname){
+        FreePassResponse freePassResponse = memberService.loginFreePassMember(nickname);
+//        log.info("프리패스: " + freePassResponse.getNickname());
+//        log.info("프리패스: " + freePassResponse.getEmail());
+//        log.info("프리패스: " + freePassResponse.getAccessToken());
+//        log.info("프리패스: " + freePassResponse.getRefreshToken());
+        return ResponseEntity.ok()
+                .body(freePassResponse);
+    }
 //    // (백엔드용)자동으로 회원 생성하고 토큰 발급 -> 포스트맨으로만 검증함
 //    @Operation(summary="백엔드 테스트용")
 //    @GetMapping("/api/test/allpass")

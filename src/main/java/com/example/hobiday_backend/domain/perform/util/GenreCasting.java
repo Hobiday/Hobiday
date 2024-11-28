@@ -1,9 +1,12 @@
 package com.example.hobiday_backend.domain.perform.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Slf4j
 public class GenreCasting {
     //    private final static String[] GENRES = {"연극", "무용", "대중무용", "서양음악", "한국음악", "대중음악", "복합", "서커스", "뮤지컬"};
     public final static HashMap<String, Integer> GENRES = new HashMap<>(){{
@@ -25,6 +28,7 @@ public class GenreCasting {
         for (String genre:genreList){
             genreStrBuilder.setCharAt(GENRES.get(genre), '1');
         }
+        log.info("장르 string 변환: " + genreStrBuilder.toString());
         return genreStrBuilder.toString();
     }
 

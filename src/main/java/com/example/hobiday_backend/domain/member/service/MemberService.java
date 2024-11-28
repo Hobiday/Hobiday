@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static com.example.hobiday_backend.global.oauth.OAuth2SuccessHandler.ACCESS_TOKEN_DURATION;
 import static com.example.hobiday_backend.global.oauth.OAuth2SuccessHandler.REFRESH_TOKEN_DURATION;
 
@@ -82,33 +84,24 @@ public class MemberService implements UserDetailsService {
                 .build();
     }
 
-    // (백엔드용)자동으로 회원, 토큰, 프로필 생성하는 메서드
-    public ProfileResponse getFreePassProfile(){
-        String nickname = "FreePassUser" + (freePassNum++);
-        String email = nickname + "@freepass.com";
-        Member member = memberRepository.save(Member.builder()
-                .nickname(nickname)
-                .email(email)
-                .build());
-        new PrincipalDetails(member); // 회원을 현재의 UserDetails에 저장 => 필요 없나?
+    public FreePassResponse loginFreePassMember(String nickname) {
+        Member member = memberRepository.findByNickname(nickname)
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));;
+        new PrincipalDetails(member); // 회원을 현재의 UserDetails에 저장
 
         String refreshToken = tokenProvider.generateToken(member, REFRESH_TOKEN_DURATION);
         saveRefreshToken(member.getId(), refreshToken); // 리프레시 토큰을 회원ID에 매칭해서 저장
-//        String accessToken = tokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
+        String accessToken = tokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
 
-        // (개발용:DB데이터 선입력)프로필도 자동 생성
-        Profile profile = profileRepository.save(Profile.builder()
-                .member(member)
-                .profileEmail(member.getEmail())
-                .build());
-
-        return ProfileResponse.builder()
-                .profileId(profile.getId())
-                .memberId(profile.getId())
-                .profileNickname(member.getNickname())
-                .profileEmail(member.getEmail())
+        return FreePassResponse.builder()
+                .id(member.getId())
+                .nickname(member.getNickname())
+                .email(member.getEmail())
+                .refreshToken(refreshToken)
+                .accessToken(accessToken)
                 .build();
     }
+
 
 
     // 위에서 사용
@@ -120,7 +113,6 @@ public class MemberService implements UserDetailsService {
         refreshTokenRepository.save(refreshToken);
 //        log.info("saveRefreshToken() 완료");
     }
-
 
 
 
@@ -141,5 +133,33 @@ public class MemberService implements UserDetailsService {
 //                .email(dto.getEmail())
 ////                .password(encoder.encode(dto.getPassword()))
 //                .build()).getId();
+//    }
+
+//    // (백엔드용)자동으로 회원, 토큰, 프로필 생성하는 메서드
+//    public ProfileResponse getFreePassProfile(){
+//        String nickname = "FreePassUser" + (freePassNum++);
+//        String email = nickname + "@freepass.com";
+//        Member member = memberRepository.save(Member.builder()
+//                .nickname(nickname)
+//                .email(email)
+//                .build());
+//        new PrincipalDetails(member); // 회원을 현재의 UserDetails에 저장 => 필요 없나?
+//
+//        String refreshToken = tokenProvider.generateToken(member, REFRESH_TOKEN_DURATION);
+//        saveRefreshToken(member.getId(), refreshToken); // 리프레시 토큰을 회원ID에 매칭해서 저장
+////        String accessToken = tokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
+//
+//        // (개발용:DB데이터 선입력)프로필도 자동 생성
+//        Profile profile = profileRepository.save(Profile.builder()
+//                .member(member)
+//                .profileEmail(member.getEmail())
+//                .build());
+//
+//        return ProfileResponse.builder()
+//                .profileId(profile.getId())
+//                .memberId(profile.getId())
+//                .profileNickname(member.getNickname())
+//                .profileEmail(member.getEmail())
+//                .build();
 //    }
 }

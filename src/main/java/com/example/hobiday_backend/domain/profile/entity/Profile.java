@@ -38,10 +38,6 @@ public class Profile {
     @Column(length=500)
     private String profileIntroduction;
 
-    @Column(columnDefinition = "TINYINT(1)")
-    @ColumnDefault("false")
-    private Boolean profileActiveFlag; // 프로필 등록 여부
-
     @Column(nullable = true)
     private String profileImageUrl;
 
@@ -51,9 +47,6 @@ public class Profile {
     @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Follow> followings = new ArrayList<>();
 
-    public void updateProfileActiveFlag(){
-        this.profileActiveFlag = true;
-    }
 
     @Builder
     public Profile(//Long userId, //방법1
